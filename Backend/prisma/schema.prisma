@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String               @id @default(uuid())
+  firstName           String
+  lastName            String
+  email               String               @unique
+  password            String
+  role                Role                 @default(USER)
+  phoneNumber         String?
+  profilePic          String?
+  walletAddress       String               @unique
+  isProfileCompleted  Boolean              @default(false)
+  isDeleted           Boolean              @default(false)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  address             Address?
+  vendorOrganizations VendorOrganization[]
+  pharmacyOutlets     PharmacyOutlet[]
+  orders              Order[]
+}
+
+model Address {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  street    String
+  city      String
+  state     String
+  country   String
+  zipCode   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model VendorOrganization {
+  id           String    @id @default(uuid())
+  ownerId      String
+  businessName String
+  gstin        String    @unique
+  email        String    @unique
+  street       String
+  city         String
+  state        String
+  pincode      String
+  isActive     Boolean   @default(true)
+  phoneNumber  String
+  website      String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  owner        User      @relation(fields: [ownerId], references: [id])
+  orders       Order[]
+  products     Product[]
+}
+
+model PharmacyOutlet {
+  id           String          @id @default(uuid())
+  ownerId      String
+  businessName String
+  street       String
+  city         String
+  state        String
+  pincode      String
+  phoneNumber  String
+  gstin        String          @unique
+  email        String          @unique
+  website      String?
+  isActive     Boolean         @default(true)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  owner        User            @relation(fields: [ownerId], references: [id])
+  orders       Order[]
+  inventory    InventoryItem[]
+}
+
+model Order {
+  id                String             @id @default(uuid())
+  userId            String
+  pharmacyOutletId  String
+  vendorOrgId       String
+  orderDate         DateTime
+  blockchainOrderId String
+  orderStatus       OrderStatus        @default(PENDING)
+  paymentStatus     PaymentStatus      @default(PENDING)
+  paymentMethod     PaymentMethod
+  amount            Float
+  blockchainTxHash  String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  user              User               @relation(fields: [userId], references: [id])
+  pharmacyOutlet    PharmacyOutlet     @relation(fields: [pharmacyOutletId], references: [id])
+  vendorOrg         VendorOrganization @relation(fields: [vendorOrgId], references: [id])
+  orderItems        OrderItem[]
+  BlockchainRecord  BlockchainRecord[]
+  InventoryItem     InventoryItem[]
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  // productId String
+  name      String
+  category  String
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id])
+}
+
+model Product {
+  id          String             @id @default(uuid())
+  name        String
+  description String?
+  brand       String
+  category    String
+  image       String?
+  unit        String
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  vendorOrg   VendorOrganization @relation(fields: [vendorOrgId], references: [id])
+  vendorOrgId String
+  inventory   InventoryItem[]
+}
+
+model InventoryItem {
+  id               String          @id @default(uuid())
+  productId        String?
+  pharmacyOutletId String?
+  // orderId          String?
+  // price            Float
+  stock            Int
+  medicineName     String
+  image            String?
+  expiry           DateTime
+  medicineBrand    String
+  category         String
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  PharmacyOutlet   PharmacyOutlet? @relation(fields: [pharmacyOutletId], references: [id])
+  Product          Product?        @relation(fields: [productId], references: [id])
+  // Order            Order?          @relation(fields: [orderId], references: [id])
+  Order            Order?          @relation(fields: [orderId], references: [id])
+  orderId          String?
+}
+
+model BlockchainRecord {
+  id        String   @id @default(uuid())
+  txHash    String   @unique
+  orderId   String?
+  action    String
+  timestamp DateTime @default(now())
+  order     Order?   @relation(fields: [orderId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPPLIER
+  PHARMACY
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+  UPI
+  CARD
+  NET_BANKING
+  CRYPTO
+}
