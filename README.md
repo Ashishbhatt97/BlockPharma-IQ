@@ -1,15 +1,15 @@
-# BlockPharma IQ 🧠💊  
+# BlockPharma IQ
 Blockchain-Enabled Demand Forecasting & Inventory Optimization for Drug Stores  
 
 ---
 
-## 📌 Overview
+## Overview
 **BlockPharma IQ** is an AI-driven pharmaceutical inventory management platform that integrates **blockchain technology** for data security and transparency.  
 
 It empowers **drug stores and suppliers** to:  
-✅ Predict drug demand with AI-driven insights  
-✅ Optimize inventory and reduce wastage  
-✅ Securely track supply chain transactions using blockchain  
+- Predict drug demand with AI-driven insights  
+- Optimize inventory and reduce wastage  
+- Securely track supply chain transactions using blockchain  
 
 This project combines **Machine Learning, Blockchain, and Web Technologies** to deliver:  
 - Real-time analytics  
@@ -18,7 +18,7 @@ This project combines **Machine Learning, Blockchain, and Web Technologies** to 
 
 ---
 
-## 🚀 Features
+## Features
 - **AI-Powered Demand Forecasting** → Accurate drug demand predictions using time-series analysis.  
 - **Inventory Optimization** → Automated stock level management and reduction of wastage.  
 - **Blockchain Integration** → Uses **Ethereum & Polygon** for secure, immutable transaction records.  
@@ -28,7 +28,7 @@ This project combines **Machine Learning, Blockchain, and Web Technologies** to 
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer          | Technologies |
 |----------------|--------------------------------------|
@@ -43,7 +43,7 @@ This project combines **Machine Learning, Blockchain, and Web Technologies** to 
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 BlockPharma-IQ/
@@ -62,7 +62,7 @@ BlockPharma-IQ/
 
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 ### 1. Clone the Repository
 ```
